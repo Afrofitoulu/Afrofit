@@ -1,5 +1,6 @@
 ---
 import AddClassForm from "../components/admin/AddClassForm.astro";
+import ClassList from "../components/admin/ClassList.astro";
 ---
 <html lang="en">
   <head>
@@ -29,6 +30,7 @@ import AddClassForm from "../components/admin/AddClassForm.astro";
       <p>Logged in as <span id="admin-email"></span></p>
       <button id="logout-btn" type="button">Log out</button>
       <AddClassForm /> 
+      <ClassList />
     </section>
   </body>
 </html>
@@ -36,4 +38,5 @@ import AddClassForm from "../components/admin/AddClassForm.astro";
 <script>
   import "../scripts/admin.ts";
   import "../scripts/admin-classes.ts";
+  import "../scripts/admin-list.ts";
 </script>
