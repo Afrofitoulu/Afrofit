@@ -14,7 +14,6 @@ function showLoggedOut() {
   $("login-panel").hidden = false;
 }
 
-// Runs on page load: are we already logged in from last time?
 async function init() {
   const { data } = await supabase.auth.getSession();
   if (data.session) showLoggedIn(data.session.user.email);

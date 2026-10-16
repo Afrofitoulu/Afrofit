@@ -1,19 +1,13 @@
 ---
+import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import SignupForm from "../components/SignupForm.astro";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Afrofit Oulu</title>
-  </head>
-  <body>
-    <Hero />
-	<SignupForm />
-  </body>
-</html>
+<Layout>
+  <Hero />
+  <SignupForm />
+</Layout>
 
 <script>
   import "../scripts/classes.ts";

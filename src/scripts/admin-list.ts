@@ -67,7 +67,7 @@ async function loadList() {
 }
 
 async function start() {
-  if (started) return; // the auth event can fire several times per page load
+  if (started) return;
   started = true;
   await cleanup();
   await loadList();
@@ -84,11 +84,10 @@ supabase.auth.getSession().then(({ data }) => {
 });
 
 supabase.auth.onAuthStateChange((_event, session) => {
-  // setTimeout avoids calling Supabase inside this callback, which can freeze it
+
   setTimeout(() => (session ? start() : stop()), 0);
 });
 
-// Delete one class by hand (e.g. added by mistake)
 document.addEventListener("click", async (e) => {
   const btn = (e.target as HTMLElement).closest(".delete-class-btn") as HTMLElement | null;
   if (!btn) return;
@@ -106,5 +105,5 @@ document.addEventListener("click", async (e) => {
   loadList();
 });
 
-// The add-class form fires this after saving
+
 document.addEventListener("classes-changed", loadList);

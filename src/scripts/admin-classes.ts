@@ -14,7 +14,7 @@ $("add-class-form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const name = input("class-name").value.trim();
-  const startsValue = input("class-starts").value; // e.g. "2026-10-20T18:00"
+  const startsValue = input("class-starts").value;
   const notes = (input("class-notes") as unknown as HTMLTextAreaElement).value.trim();
 
   if (!name) return show("add-class-error", "Please enter a name.");
@@ -43,6 +43,5 @@ $("add-class-form").addEventListener("submit", async (e) => {
   show("add-class-success", `Added "${name}".`);
   (e.target as HTMLFormElement).reset();
 
-  // The class list (next step) listens for this and reloads itself
   document.dispatchEvent(new CustomEvent("classes-changed"));
 });
