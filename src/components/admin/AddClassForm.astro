@@ -1,0 +1,21 @@
+<section>
+  <h2>Add a class</h2>
+  <form id="add-class-form">
+    <label>Name
+      <input id="class-name" type="text" maxlength="80" required />
+    </label>
+
+    <label>Date and time (Finnish time)
+      <input id="class-starts" type="datetime-local" required />
+    </label>
+
+    <label>Notes (optional)
+      <textarea id="class-notes" maxlength="300"></textarea>
+    </label>
+
+    <p id="add-class-error" hidden></p>
+    <p id="add-class-success" hidden></p>
+
+    <button id="add-class-btn" type="submit">Add class</button>
+  </form>
+</section>
