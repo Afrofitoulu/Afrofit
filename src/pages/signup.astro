@@ -1,0 +1,165 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Sign up – Afrofit Oulu">
+  <main class="signup-page">
+    <header class="top">
+      <a href="/" class="back" aria-label="Back to the front page">←</a>
+      <h1>Sign up for the class</h1>
+    </header>
+
+    <p id="form-load-error" role="alert" hidden>
+      Couldn't load the classes. Please try again later.
+    </p>
+    <p id="form-no-classes" hidden>There are no upcoming classes right now.</p>
+
+    <form id="signup-page-form" novalidate>
+      <label for="form-class">Class</label>
+      <select id="form-class" disabled>
+        <option value="">Loading…</option>
+      </select>
+      <p id="form-class-notes" hidden></p>
+
+      <label for="form-name">Name</label>
+      <input
+        id="form-name"
+        type="text"
+        maxlength="100"
+        autocomplete="name"
+        placeholder="First name Last name"
+      />
+
+      <label for="form-phone">Phone number</label>
+      <input
+        id="form-phone"
+        type="tel"
+        autocomplete="tel"
+        placeholder="040 123 4567"
+      />
+
+      <label class="check" for="form-consent">
+        <input id="form-consent" type="checkbox" />
+        <span>
+          I agree that my name and phone number are saved so Afrofit can add me
+          to the class WhatsApp group. They are deleted shortly after the class.
+        </span>
+      </label>
+
+      <p id="form-error" role="alert" hidden></p>
+
+      <button id="form-submit" type="submit">Sign up</button>
+    </form>
+
+    <p id="form-done" role="status" hidden></p>
+  </main>
+</Layout>
+
+<script>
+  import "../scripts/signup-page.ts";
+</script>
+
+<style>
+  .signup-page {
+    max-width: 28rem;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    font-family: system-ui, sans-serif;
+    line-height: 1.4;
+  }
+
+  .top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .back {
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    color: #000;
+    text-decoration: none;
+  }
+
+  .back:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin: 1rem 0 0.35rem;
+  }
+
+  select,
+  input[type="text"],
+  input[type="tel"] {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.7rem 0.8rem;
+    font: inherit;
+    color: #000;
+    background: #fff;
+    border: 1px solid #888;
+    border-radius: 0.5rem;
+  }
+
+  select:focus,
+  input:focus,
+  button:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+
+  #form-class-notes {
+    margin: 0.5rem 0 0;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+  }
+
+  .check {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    font-weight: 400;
+    margin-top: 1.25rem;
+  }
+
+  .check input {
+    margin-top: 0.2rem;
+    flex: none;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.8rem;
+    font: inherit;
+    font-weight: 600;
+    color: #fff;
+    background: #000;
+    border: 1px solid #000;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+</style>

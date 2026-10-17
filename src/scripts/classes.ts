@@ -7,8 +7,7 @@ function renderHero(next: any) {
   $("next-class-name").textContent = next.name;
   $("next-class-date").textContent = formatClassTime(next.starts);
   $("next-class-notes").textContent = next.notes ?? "";
-  $("hero").dataset.classId = String(next.id);
-  $("hero").dataset.classStarts = next.starts;
+  ($("signup-open-btn") as HTMLAnchorElement).href = `/signup?class=${next.id}`;
   $("class-details").hidden = false;
 }
 
@@ -18,7 +17,6 @@ function renderList(classes: any[]) {
 
   for (const c of classes) {
     const li = document.createElement("li");
-    li.dataset.classId = String(c.id);
 
     const name = document.createElement("strong");
     name.textContent = c.name;
@@ -26,15 +24,12 @@ function renderList(classes: any[]) {
     const when = document.createElement("span");
     when.textContent = " · " + formatClassTime(c.starts);
 
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "class-signup-btn";
-    btn.textContent = "Sign up";
-    btn.dataset.classId = String(c.id);
-    btn.dataset.classStarts = c.starts;
-    btn.dataset.className = c.name;
+    const link = document.createElement("a");
+    link.className = "class-signup-btn";
+    link.href = `/signup?class=${c.id}`;
+    link.textContent = "Sign up";
 
-    li.append(name, when, " ", btn);
+    li.append(name, when, " ", link);
     list.append(li);
   }
 
