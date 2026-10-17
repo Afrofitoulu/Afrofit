@@ -1,10 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import UpcomingClasses from "../components/UpcomingClasses.astro";
-const socials = [
-  { name: "Instagram", url: "https://www.instagram.com/afrofitoulu/" },
-  { name: "TikTok", url: "https://www.tiktok.com/@afrofit_oulu" },
-];
 ---
 
 <Layout>
@@ -12,10 +8,12 @@ const socials = [
     <header class="brand">
       <h1 id="hero-title"><img src="/logo.jpg" alt="Afrofit Oulu" width="180" height="180" /></h1>
       <div class="socials" aria-label="Social media">
-        {socials.map(({ name, url }) => url
-          ? <a href={url} target="_blank" rel="noopener noreferrer">{name} <span aria-hidden="true">↗</span></a>
-          : <span>{name}</span>
-        )}
+        <a href="https://www.instagram.com/afrofitoulu/" target="_blank" rel="noopener noreferrer">
+          Instagram <span aria-hidden="true">↗</span>
+        </a>
+        <a href="https://www.tiktok.com/@afrofit_oulu" target="_blank" rel="noopener noreferrer">
+          TikTok <span aria-hidden="true">↗</span>
+        </a>
       </div>
     </header>
     <section class="hero" aria-labelledby="hero-title">

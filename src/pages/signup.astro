@@ -5,10 +5,14 @@ import Layout from "../layouts/Layout.astro";
 <Layout title="Sign up – Afrofit Oulu">
   <main class="signup-page">
     <header class="top">
-      <a href="/" class="back" aria-label="Back to the front page">←</a>
-      <h1>Sign up for the class</h1>
+      <a href="/" class="back"><span class="back-icon" aria-hidden="true"></span>Back to classes</a>
     </header>
 
+    <div class="card">
+    <div id="form-heading">
+      <h1>Join the class</h1>
+      <p class="intro">Choose your class and leave your details below.</p>
+    </div>
     <p id="form-load-error" role="alert" hidden>
       Couldn't load the classes. Please try again later.
     </p>
@@ -16,10 +20,14 @@ import Layout from "../layouts/Layout.astro";
 
     <form id="signup-page-form" novalidate>
       <label for="form-class">Class</label>
-      <select id="form-class" disabled>
+      <select id="form-class" aria-describedby="form-class-error" disabled>
         <option value="">Loading…</option>
       </select>
-      <p id="form-class-notes" hidden></p>
+      <p id="form-class-error" class="field-error" hidden></p>
+      <aside id="form-class-info" aria-labelledby="class-info-title" hidden>
+        <h2 id="class-info-title"><span class="info-icon" aria-hidden="true">i</span>About this class</h2>
+        <p id="form-class-notes"></p>
+      </aside>
 
       <label for="form-name">Name</label>
       <input
@@ -28,7 +36,9 @@ import Layout from "../layouts/Layout.astro";
         maxlength="100"
         autocomplete="name"
         placeholder="First name Last name"
+        aria-describedby="form-name-error"
       />
+      <p id="form-name-error" class="field-error" hidden></p>
 
       <label for="form-phone">Phone number</label>
       <input
@@ -36,22 +46,37 @@ import Layout from "../layouts/Layout.astro";
         type="tel"
         autocomplete="tel"
         placeholder="040 123 4567"
+        aria-describedby="form-phone-error"
       />
+      <p id="form-phone-error" class="field-error" hidden></p>
 
       <label class="check" for="form-consent">
-        <input id="form-consent" type="checkbox" />
+        <input id="form-consent" type="checkbox" aria-describedby="form-consent-error" />
         <span>
           I agree that my name and phone number are saved so Afrofit can add me
           to the class WhatsApp group. They are deleted shortly after the class.
         </span>
       </label>
+      <p id="form-consent-error" class="field-error" hidden></p>
 
       <p id="form-error" role="alert" hidden></p>
 
-      <button id="form-submit" type="submit">Sign up</button>
+      <button id="form-submit" type="submit" disabled>Sign up</button>
     </form>
 
-    <p id="form-done" role="status" hidden></p>
+    <section id="form-done" aria-labelledby="thanks-title" hidden>
+      <h1 id="thanks-title" tabindex="-1">Thank you!</h1>
+      <p class="intro">You're signed up. We look forward to dancing with you!</p>
+      <dl>
+        <div><dt>Class</dt><dd id="done-class"></dd></div>
+        <div><dt>Date and time</dt><dd id="done-time"></dd></div>
+        <div id="done-notes-row" hidden><dt>About your class</dt><dd id="done-notes"></dd></div>
+        <div><dt>Your name</dt><dd id="done-name"></dd></div>
+        <div><dt>Phone number</dt><dd id="done-phone"></dd></div>
+      </dl>
+      <a class="return-link" href="/">Back to classes</a>
+    </section>
+    </div>
   </main>
 </Layout>
 
@@ -60,43 +85,86 @@ import Layout from "../layouts/Layout.astro";
 </script>
 
 <style>
-  .signup-page {
-    max-width: 28rem;
-    margin: 2rem auto;
-    padding: 0 1rem;
+  :global(body) {
+    margin: 0;
+    background: #eeece6;
+    color: #20251e;
     font-family: system-ui, sans-serif;
-    line-height: 1.4;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .signup-page {
+    max-width: 640px;
+    margin: 40px auto;
+    padding: 0 16px;
+  }
+
+  .card {
+    padding: 40px;
+    background: #fdfcfb;
+    border-radius: 4px;
   }
 
   .top {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 24px;
   }
 
   h1 {
-    font-size: 1.5rem;
+    font-family: Georgia, serif;
+    font-size: 36px;
+    font-weight: normal;
+    line-height: 1.2;
     margin: 0;
   }
 
+  .intro {
+    color: #6c706f;
+    margin: 12px 0 28px;
+  }
+
   .back {
-    font-size: 1.5rem;
-    line-height: 1;
-    padding: 0.25rem 0.5rem;
-    color: #000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #20251e;
     text-decoration: none;
   }
 
-  .back:focus-visible {
-    outline: 2px solid #000;
-    outline-offset: 2px;
+  .back-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fdfcfb;
+  }
+
+  .back-icon::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-left: 1.5px solid #20251e;
+    border-bottom: 1.5px solid #20251e;
+    transform: rotate(45deg);
+  }
+
+  .back:hover .back-icon {
+    background: #dfe3db;
   }
 
   label {
     display: block;
     font-weight: 600;
-    margin: 1rem 0 0.35rem;
+    margin: 24px 0 8px;
   }
 
   select,
@@ -105,58 +173,144 @@ import Layout from "../layouts/Layout.astro";
     display: block;
     width: 100%;
     box-sizing: border-box;
-    padding: 0.7rem 0.8rem;
-    font: inherit;
-    color: #000;
+    padding: 12px;
+    font-family: inherit;
+    font-size: 16px;
+    color: #20251e;
     background: #fff;
-    border: 1px solid #888;
-    border-radius: 0.5rem;
+    border: 1px solid #b8bcb0;
+    border-radius: 4px;
   }
 
   select:focus,
   input:focus,
-  button:focus-visible {
-    outline: 2px solid #000;
-    outline-offset: 2px;
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid #254416;
+    outline-offset: 4px;
+  }
+
+  #form-class-info {
+    margin-top: 16px;
+    padding: 16px;
+    border: 1px solid #b5d1e5;
+    border-left: 4px solid #397ba7;
+    border-radius: 4px;
+    background: #edf5fb;
+    color: #28516d;
+  }
+
+  #class-info-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 15px;
+  }
+
+  .info-icon {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #397ba7;
+    border-radius: 50%;
+    text-align: center;
+    font-family: Georgia, serif;
+    line-height: 18px;
   }
 
   #form-class-notes {
-    margin: 0.5rem 0 0;
-    padding: 0.7rem 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
+    margin: 8px 0 0;
+    font-size: 14px;
+    white-space: pre-line;
   }
 
   .check {
     display: flex;
-    gap: 0.6rem;
+    gap: 10px;
     align-items: flex-start;
     font-weight: 400;
-    margin-top: 1.25rem;
+    margin-top: 24px;
+    font-size: 14px;
   }
 
   .check input {
-    margin-top: 0.2rem;
+    margin-top: 5px;
     flex: none;
+    accent-color: #254416;
   }
 
   button {
     display: block;
     width: 100%;
-    margin-top: 1.5rem;
-    padding: 0.8rem;
-    font: inherit;
+    margin-top: 28px;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 16px;
     font-weight: 600;
     color: #fff;
-    background: #000;
-    border: 1px solid #000;
-    border-radius: 0.5rem;
+    background: #254416;
+    border: 0;
+    border-radius: 4px;
     cursor: pointer;
   }
 
   button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  button:hover {
+    background: #1d3511;
+  }
+
+  .field-error, #form-error, #form-load-error {
+    margin: 8px 0 0;
+    color: #a12b16;
+    font-size: 14px;
+  }
+
+  [aria-invalid="true"] {
+    border-color: #a12b16;
+  }
+
+  #thanks-title {
+    font-size: 44px;
+  }
+
+  dl {
+    margin: 28px 0;
+    padding-top: 24px;
+    border-top: 1px solid #deded3;
+  }
+
+  dl div {
+    margin-bottom: 20px;
+  }
+
+  dt {
+    color: #6c706f;
+    font-size: 14px;
+  }
+
+  dd {
+    margin: 4px 0 0;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+  }
+
+  .return-link {
+    color: #254416;
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: 540px) {
+    .signup-page {
+      margin: 24px auto;
+    }
+
+    .card {
+      padding: 24px;
+    }
   }
 
   [hidden] {
