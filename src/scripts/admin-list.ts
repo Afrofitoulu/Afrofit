@@ -9,34 +9,36 @@ let started = false;
 async function cleanup() {
   const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const { error } = await supabase.from("classes").delete().lt("starts", cutoff);
-  if (error) console.error("Cleanup failed", error);
+  if (error) {
+    console.error("Cleanup failed", error);
+  }
 }
 
-function renderClass(c: any) {
+function renderClass(classItem: any) {
   const box = document.createElement("article");
 
   const title = document.createElement("h3");
-  title.textContent = `${c.name} · ${formatClassTime(c.starts)}`;
+  title.textContent = `${classItem.name} · ${formatClassTime(classItem.starts)}`;
 
   const count = document.createElement("p");
-  count.textContent = `${c.signups.length} signed up`;
+  count.textContent = `${classItem.signups.length} signed up`;
 
   const list = document.createElement("ul");
-  for (const s of c.signups) {
+  for (const signup of classItem.signups) {
     const li = document.createElement("li");
-    li.textContent = `${s.name} – ${s.phone}`;
+    li.textContent = `${signup.name} – ${signup.phone}`;
     list.append(li);
   }
 
-  const del = document.createElement("button");
-  del.type = "button";
-  del.className = "delete-class-btn";
-  del.textContent = "Delete class";
-  del.dataset.classId = String(c.id);
-  del.dataset.className = c.name;
-  del.dataset.count = String(c.signups.length);
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.className = "delete-class-btn";
+  deleteButton.textContent = "Delete class";
+  deleteButton.dataset.classId = String(classItem.id);
+  deleteButton.dataset.className = classItem.name;
+  deleteButton.dataset.count = String(classItem.signups.length);
 
-  box.append(title, count, list, del);
+  box.append(title, count, list, deleteButton);
   return box;
 }
 
@@ -57,17 +59,28 @@ async function loadList() {
   }
 
   const now = Date.now();
-  const upcoming = data.filter((c) => new Date(c.starts).getTime() > now);
-  const past = data.filter((c) => new Date(c.starts).getTime() <= now);
+  const upcomingList = $("admin-upcoming");
+  const pastList = $("admin-past");
+  upcomingList.replaceChildren();
+  pastList.replaceChildren();
 
-  $("admin-upcoming").replaceChildren(...upcoming.map(renderClass));
-  $("admin-past").replaceChildren(...past.map(renderClass));
-  $("admin-upcoming-empty").hidden = upcoming.length > 0;
-  $("admin-past-section").hidden = past.length === 0;
+  for (const classItem of data) {
+    const starts = new Date(classItem.starts).getTime();
+    if (starts > now) {
+      upcomingList.append(renderClass(classItem));
+    } else if (starts <= now) {
+      pastList.append(renderClass(classItem));
+    }
+  }
+
+  $("admin-upcoming-empty").hidden = upcomingList.children.length > 0;
+  $("admin-past-section").hidden = pastList.children.length === 0;
 }
 
 async function start() {
-  if (started) return;
+  if (started) {
+    return;
+  }
   started = true;
   await cleanup();
   await loadList();
@@ -79,21 +92,37 @@ function stop() {
   $("admin-past").replaceChildren();
 }
 
-supabase.auth.getSession().then(({ data }) => {
-  if (data.session) start();
-});
+async function checkSession() {
+  const { data } = await supabase.auth.getSession();
+  if (data.session) {
+    await start();
+  }
+}
+
+checkSession();
 
 supabase.auth.onAuthStateChange((_event, session) => {
-
-  setTimeout(() => (session ? start() : stop()), 0);
+  // Run database requests after the auth callback has finished.
+  setTimeout(() => {
+    if (session) {
+      start();
+    } else {
+      stop();
+    }
+  }, 0);
 });
 
 document.addEventListener("click", async (e) => {
   const btn = (e.target as HTMLElement).closest(".delete-class-btn") as HTMLElement | null;
-  if (!btn) return;
+  if (!btn) {
+    return;
+  }
 
   const { classId, className, count } = btn.dataset;
-  if (!confirm(`Delete "${className}" and its ${count} signup(s)?`)) return;
+  const confirmed = confirm(`Delete "${className}" and its ${count} signup(s)?`);
+  if (!confirmed) {
+    return;
+  }
 
   const { error } = await supabase.from("classes").delete().eq("id", Number(classId));
   if (error) {

@@ -5,10 +5,16 @@ const $ = (id: string) => document.getElementById(id)!;
 const input = (id: string) => $(id) as HTMLInputElement;
 const select = $("form-class") as HTMLSelectElement;
 
-type ClassRow = { id: number; name: string; starts: string; notes: string | null };
+type ClassRow = {
+  id: number;
+  name: string;
+  starts: string;
+  notes: string | null;
+};
 
 let classes: ClassRow[] = [];
 let submitting = false;
+const fields = ["form-class", "form-name", "form-phone", "form-consent"];
 
 function fieldError(field: string, message: string) {
   $(`${field}-error`).textContent = message;
@@ -21,7 +27,7 @@ function clearFieldError(field: string) {
   $(field).removeAttribute("aria-invalid");
 }
 
-for (const field of ["form-class", "form-name", "form-phone", "form-consent"]) {
+for (const field of fields) {
   $(field).addEventListener("input", () => clearFieldError(field));
 }
 
@@ -30,11 +36,23 @@ function showError(message: string) {
   $("form-error").hidden = false;
 }
 
-// Shows the class notes (if any) under the dropdown
+function getSelectedClass() {
+  for (const classItem of classes) {
+    if (String(classItem.id) === select.value) {
+      return classItem;
+    }
+  }
+}
+
 function showNotes() {
-  const chosen = classes.find((c) => String(c.id) === select.value);
-  $("form-class-notes").textContent = chosen?.notes ?? "";
-  $("form-class-info").hidden = !chosen?.notes?.trim();
+  const chosen = getSelectedClass();
+  $("form-class-info").hidden = true;
+  $("form-class-notes").textContent = "";
+
+  if (chosen && chosen.notes && chosen.notes.trim()) {
+    $("form-class-notes").textContent = chosen.notes;
+    $("form-class-info").hidden = false;
+  }
 }
 
 async function loadClasses() {
@@ -60,20 +78,19 @@ async function loadClasses() {
 
   classes = data;
 
-  select.replaceChildren(
-    ...classes.map((c) => {
-      const option = document.createElement("option");
-      option.value = String(c.id);
-      option.textContent = `${c.name} (${formatClassTime(c.starts)})`;
-      return option;
-    })
-  );
-
   // /signup?class=12 opens with that class selected.
   // If the id is missing or the class has passed, the next class stays selected.
   const wanted = new URLSearchParams(location.search).get("class");
-  if (wanted && classes.some((c) => String(c.id) === wanted)) {
-    select.value = wanted;
+  select.replaceChildren();
+  for (const classItem of classes) {
+    const option = document.createElement("option");
+    option.value = String(classItem.id);
+    option.textContent = `${classItem.name} (${formatClassTime(classItem.starts)})`;
+    select.append(option);
+
+    if (option.value === wanted) {
+      option.selected = true;
+    }
   }
 
   select.disabled = false;
@@ -85,30 +102,41 @@ select.addEventListener("change", showNotes);
 
 $("signup-page-form").addEventListener("submit", async (e) => {
   e.preventDefault();
-  if (submitting) return;
+  if (submitting) {
+    return;
+  }
   $("form-error").hidden = true;
-  for (const field of ["form-class", "form-name", "form-phone", "form-consent"]) {
+  for (const field of fields) {
     clearFieldError(field);
   }
 
   // Copy everything before the await, so changes while saving can't affect it
-  const chosen = classes.find((c) => String(c.id) === select.value);
+  const chosen = getSelectedClass();
   const name = input("form-name").value.trim();
   const phone = input("form-phone").value.trim();
 
-  if (!chosen) fieldError("form-class", "Please choose a class.");
-  if (!name) fieldError("form-name", "Please enter your name.");
-  if (!/^[0-9+()\-\s.]{6,30}$/.test(phone))
+  if (!chosen) {
+    fieldError("form-class", "Please choose a class.");
+  }
+  if (!name) {
+    fieldError("form-name", "Please enter your name.");
+  }
+  const validPhone = /^[0-9+()\-\s.]{6,30}$/.test(phone);
+  if (!validPhone) {
     fieldError("form-phone", "Please enter a valid phone number.");
-  if (!input("form-consent").checked)
+  }
+  if (!input("form-consent").checked) {
     fieldError("form-consent", "Please tick the box to continue.");
+  }
 
   const invalid = document.querySelector<HTMLElement>('[aria-invalid="true"]');
   if (invalid) {
     invalid.focus();
     return;
   }
-  if (!chosen) return;
+  if (!chosen) {
+    return;
+  }
 
   const btn = $("form-submit") as HTMLButtonElement;
   submitting = true;
@@ -132,7 +160,8 @@ $("signup-page-form").addEventListener("submit", async (e) => {
         return;
       }
       console.error(error);
-      return showError("Something went wrong. Please try again.");
+      showError("Something went wrong. Please try again.");
+      return;
     }
 
     $("signup-page-form").hidden = true;

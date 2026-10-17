@@ -7,31 +7,31 @@ function renderList(classes: any[]) {
   const list = $("class-list-items");
   list.replaceChildren();
 
-  for (const c of classes) {
+  for (const classItem of classes) {
     const li = document.createElement("li");
 
     const details = document.createElement("span");
 
     const name = document.createElement("span");
     name.className = "class-title";
-    name.textContent = c.name;
+    name.textContent = classItem.name;
 
     const when = document.createElement("time");
-    when.dateTime = c.starts;
-    when.textContent = formatClassTime(c.starts);
+    when.dateTime = classItem.starts;
+    when.textContent = formatClassTime(classItem.starts);
     details.append(name, when);
 
-    if (c.notes?.trim()) {
+    if (classItem.notes && classItem.notes.trim()) {
       const notes = document.createElement("span");
       notes.className = "class-notes";
-      notes.textContent = c.notes;
+      notes.textContent = classItem.notes;
       details.append(notes);
     }
 
     const link = document.createElement("a");
     link.className = "class-signup-btn";
-    link.href = `/signup?class=${encodeURIComponent(c.id)}`;
-    link.setAttribute("aria-label", `Sign up for ${c.name}`);
+    link.href = `/signup?class=${encodeURIComponent(classItem.id)}`;
+    link.setAttribute("aria-label", `Sign up for ${classItem.name}`);
     const chevron = document.createElement("span");
     chevron.className = "class-chevron";
     chevron.setAttribute("aria-hidden", "true");

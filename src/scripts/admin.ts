@@ -16,14 +16,20 @@ function showLoggedOut() {
 
 async function init() {
   const { data } = await supabase.auth.getSession();
-  if (data.session) showLoggedIn(data.session.user.email);
-  else showLoggedOut();
+  if (data.session) {
+    showLoggedIn(data.session.user.email);
+  } else {
+    showLoggedOut();
+  }
 }
 
 // Keeps the page in sync if the session changes (login, logout, expiry)
 supabase.auth.onAuthStateChange((_event, session) => {
-  if (session) showLoggedIn(session.user.email);
-  else showLoggedOut();
+  if (session) {
+    showLoggedIn(session.user.email);
+  } else {
+    showLoggedOut();
+  }
 });
 
 $("login-form").addEventListener("submit", async (e) => {

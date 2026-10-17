@@ -15,14 +15,23 @@ $("add-class-form").addEventListener("submit", async (e) => {
 
   const name = input("class-name").value.trim();
   const startsValue = input("class-starts").value;
-  const notes = (input("class-notes") as unknown as HTMLTextAreaElement).value.trim();
+  const notesInput = $("class-notes") as HTMLTextAreaElement;
+  const notes = notesInput.value.trim();
 
-  if (!name) return show("add-class-error", "Please enter a name.");
-  if (!startsValue) return show("add-class-error", "Please pick a date and time.");
+  if (!name) {
+    show("add-class-error", "Please enter a name.");
+    return;
+  }
+  if (!startsValue) {
+    show("add-class-error", "Please pick a date and time.");
+    return;
+  }
 
   const startsDate = new Date(startsValue); // read in this browser's time zone
-  if (startsDate.getTime() <= Date.now())
-    return show("add-class-error", "That time is in the past.");
+  if (startsDate.getTime() <= Date.now()) {
+    show("add-class-error", "That time is in the past.");
+    return;
+  }
 
   const btn = $("add-class-btn") as HTMLButtonElement;
   btn.disabled = true;
@@ -37,7 +46,8 @@ $("add-class-form").addEventListener("submit", async (e) => {
 
   if (error) {
     console.error(error);
-    return show("add-class-error", "Couldn't save the class. Are you logged in?");
+    show("add-class-error", "Couldn't save the class. Are you logged in?");
+    return;
   }
 
   show("add-class-success", `Added "${name}".`);
