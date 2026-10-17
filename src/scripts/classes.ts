@@ -3,15 +3,6 @@ import { formatClassTime } from "../lib/format";
 
 const $ = (id: string) => document.getElementById(id)!;
 
-function renderHero(next: any) {
-  $("next-class-name").textContent = next.name;
-  $("next-class-date").textContent = formatClassTime(next.starts);
-  $("next-class-notes").textContent = next.notes ?? "";
-  $("hero").dataset.classId = String(next.id);
-  $("hero").dataset.classStarts = next.starts;
-  $("class-details").hidden = false;
-}
-
 function renderList(classes: any[]) {
   const list = $("class-list-items");
   list.replaceChildren();
@@ -20,21 +11,35 @@ function renderList(classes: any[]) {
     const li = document.createElement("li");
     li.dataset.classId = String(c.id);
 
-    const name = document.createElement("strong");
+    const details = document.createElement("div");
+
+    const name = document.createElement("h3");
     name.textContent = c.name;
 
-    const when = document.createElement("span");
-    when.textContent = " · " + formatClassTime(c.starts);
+    const when = document.createElement("time");
+    when.dateTime = c.starts;
+    when.textContent = formatClassTime(c.starts);
+    details.append(name, when);
+
+    if (c.notes?.trim()) {
+      const notes = document.createElement("p");
+      notes.textContent = c.notes;
+      details.append(notes);
+    }
 
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "class-signup-btn";
-    btn.textContent = "Sign up";
+    btn.setAttribute("aria-label", `Sign up for ${c.name}`);
+    const chevron = document.createElement("span");
+    chevron.className = "class-chevron";
+    chevron.setAttribute("aria-hidden", "true");
+    btn.append(chevron);
     btn.dataset.classId = String(c.id);
     btn.dataset.classStarts = c.starts;
     btn.dataset.className = c.name;
 
-    li.append(name, when, " ", btn);
+    li.append(details, btn);
     list.append(li);
   }
 
@@ -60,7 +65,6 @@ async function loadClasses() {
     return;
   }
 
-  renderHero(data[0]);
   renderList(data);
 }
 
