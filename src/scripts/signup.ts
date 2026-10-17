@@ -26,19 +26,9 @@ function closeForm() {
   selected = null;
 }
 
-// One listener handles the hero button and every list button
+// One listener handles every list button
 document.addEventListener("click", (e) => {
   const target = e.target as HTMLElement;
-
-  if (target.closest("#signup-open-btn")) {
-    const hero = $("hero");
-    openForm(
-      hero.dataset.classId!,
-      $("next-class-name").textContent ?? "",
-      hero.dataset.classStarts!
-    );
-    return;
-  }
 
   const listBtn = target.closest(".class-signup-btn") as HTMLElement | null;
   if (listBtn) {

@@ -16,3 +16,124 @@
   <h2>All upcoming classes</h2>
   <ul id="class-list-items"></ul>
 </section>
+
+<style>
+  :global(body) {
+    background: #f1f0ec;
+    color: #18272b;
+  }
+
+  #upcoming-classes {
+    max-width: 54rem;
+    margin: 3rem auto;
+  }
+
+  #upcoming-classes h2 {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0 0 1.25rem;
+    font-weight: normal;
+    text-align: center;
+  }
+
+  #upcoming-classes h2::before,
+  #upcoming-classes h2::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid #cdd0c8;
+  }
+
+  #upcoming-classes h2,
+  #class-list-items :global(.class-title) {
+    font-size: 1.75rem;
+    font-family: Georgia, "Times New Roman", serif;
+    letter-spacing: -0.025em;
+  }
+
+  #class-list-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: system-ui, sans-serif;
+  }
+
+  #class-list-items :global(.class-signup-btn) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    border: 0;
+    background: #fdfcfb;
+    border-radius: 0.25rem;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  #class-list-items :global(.class-title) {
+    display: block;
+    margin: 0 0 0.5rem;
+  }
+
+  #class-list-items :global(time) {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  #class-list-items :global(time::before) {
+    content: "";
+    flex: 0 0 1rem;
+    height: 1rem;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2318272b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  #class-list-items :global(.class-notes) {
+    display: block;
+    margin: 0.4rem 0 0;
+    color: #6c706f;
+    white-space: pre-line;
+  }
+
+  #class-list-items :global(.class-chevron) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #eeefeb;
+  }
+
+  #class-list-items :global(.class-chevron::before) {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-top: 1.5px solid currentColor;
+    border-right: 1.5px solid currentColor;
+    transform: translateX(-2px) rotate(45deg);
+  }
+
+  #class-list-items :global(.class-signup-btn:hover) {
+    background: #dfe3db;
+  }
+
+  #class-list-items :global(.class-signup-btn:focus-visible) {
+    outline: 2px solid #52694f;
+    outline-offset: 4px;
+  }
+
+  @media (max-width: 540px) {
+    #class-list-items :global(.class-signup-btn) {
+      padding: 1rem;
+      gap: 0.75rem;
+    }
+  }
+</style>
