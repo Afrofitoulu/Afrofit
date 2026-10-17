@@ -11,9 +11,10 @@ function renderList(classes: any[]) {
     const li = document.createElement("li");
     li.dataset.classId = String(c.id);
 
-    const details = document.createElement("div");
+    const details = document.createElement("span");
 
-    const name = document.createElement("h3");
+    const name = document.createElement("span");
+    name.className = "class-title";
     name.textContent = c.name;
 
     const when = document.createElement("time");
@@ -22,7 +23,8 @@ function renderList(classes: any[]) {
     details.append(name, when);
 
     if (c.notes?.trim()) {
-      const notes = document.createElement("p");
+      const notes = document.createElement("span");
+      notes.className = "class-notes";
       notes.textContent = c.notes;
       details.append(notes);
     }
@@ -34,12 +36,12 @@ function renderList(classes: any[]) {
     const chevron = document.createElement("span");
     chevron.className = "class-chevron";
     chevron.setAttribute("aria-hidden", "true");
-    btn.append(chevron);
+    btn.append(details, chevron);
     btn.dataset.classId = String(c.id);
     btn.dataset.classStarts = c.starts;
     btn.dataset.className = c.name;
 
-    li.append(details, btn);
+    li.append(btn);
     list.append(li);
   }
 
