@@ -1,19 +1,15 @@
 ---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import SignupForm from "../components/SignupForm.astro";
 ---
 
-<html lang="en">
-   <h1>Afrofit</h1>
+<Layout>
+  <Hero />
+  <SignupForm />
+</Layout>
 
-   <script>
-     import { supabase } from "../lib/supabase";
-
-     const { data, error } = await supabase
-       .from("classes")
-       .select("*")
-       .gt("starts", new Date().toISOString())
-       .order("starts")
-       .limit(1);
-
-     console.log({ data, error });
-   </script>
-</html>
+<script>
+  import "../scripts/classes.ts";
+  import "../scripts/signup.ts";
+</script>

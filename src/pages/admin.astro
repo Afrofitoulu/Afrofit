@@ -1,0 +1,42 @@
+---
+import AddClassForm from "../components/admin/AddClassForm.astro";
+import ClassList from "../components/admin/ClassList.astro";
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex" />
+    <title>Afrofit admin</title>
+  </head>
+  <body>
+    <h1>Afrofit admin</h1>
+
+    <!-- Both panels start hidden. The script shows the right one -->
+    <section id="login-panel" hidden>
+      <form id="login-form">
+        <label>Email
+          <input id="login-email" type="email" autocomplete="username" required />
+        </label>
+        <label>Password
+          <input id="login-password" type="password" autocomplete="current-password" required />
+        </label>
+        <p id="login-error" hidden></p>
+        <button id="login-btn" type="submit">Log in</button>
+      </form>
+    </section>
+
+    <section id="admin-panel" hidden>
+      <p>Logged in as <span id="admin-email"></span></p>
+      <button id="logout-btn" type="button">Log out</button>
+      <AddClassForm /> 
+      <ClassList />
+    </section>
+  </body>
+</html>
+
+<script>
+  import "../scripts/admin.ts";
+  import "../scripts/admin-classes.ts";
+  import "../scripts/admin-list.ts";
+</script>
