@@ -9,7 +9,6 @@ function renderList(classes: any[]) {
 
   for (const c of classes) {
     const li = document.createElement("li");
-    li.dataset.classId = String(c.id);
 
     const details = document.createElement("span");
 
@@ -29,19 +28,16 @@ function renderList(classes: any[]) {
       details.append(notes);
     }
 
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "class-signup-btn";
-    btn.setAttribute("aria-label", `Sign up for ${c.name}`);
+    const link = document.createElement("a");
+    link.className = "class-signup-btn";
+    link.href = `/signup?class=${encodeURIComponent(c.id)}`;
+    link.setAttribute("aria-label", `Sign up for ${c.name}`);
     const chevron = document.createElement("span");
     chevron.className = "class-chevron";
     chevron.setAttribute("aria-hidden", "true");
-    btn.append(details, chevron);
-    btn.dataset.classId = String(c.id);
-    btn.dataset.classStarts = c.starts;
-    btn.dataset.className = c.name;
+    link.append(details, chevron);
 
-    li.append(btn);
+    li.append(link);
     list.append(li);
   }
 
