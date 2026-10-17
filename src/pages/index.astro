@@ -1,11 +1,130 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Hero from "../components/Hero.astro";
+import UpcomingClasses from "../components/UpcomingClasses.astro";
+const socials = [
+  { name: "Instagram", url: "https://www.instagram.com/afrofitoulu/" },
+  { name: "TikTok", url: "https://www.tiktok.com/@afrofit_oulu" },
+];
 ---
 
 <Layout>
-  <Hero />
+  <main id="main">
+    <header class="brand">
+      <h1 id="hero-title"><img src="/logo.jpg" alt="Afrofit Oulu" width="180" height="180" /></h1>
+      <div class="socials" aria-label="Social media">
+        {socials.map(({ name, url }) => url
+          ? <a href={url} target="_blank" rel="noopener noreferrer">{name} <span aria-hidden="true">↗</span></a>
+          : <span>{name}</span>
+        )}
+      </div>
+    </header>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <p class="intro-text">Hello and welcome to Afrofit Oulu, a dance fitness community moving to the rhythms of Afrobeats and African sounds!</p>
+        <p>Our classes combine energetic choreography with a supportive, inclusive atmosphere, helping members stay active, build confidence, and connect with others.</p>
+        <p class="last-paragraph">No dance experience needed, just bring your energy.</p>
+      </div>
+    </section>
+    <UpcomingClasses />
+  </main>
 </Layout>
+
+<style>
+  :global(body) {
+    margin: 0;
+    background: #eeece6;
+    color: #20251e;
+    font-family: system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(a:focus-visible),
+  :global(button:focus-visible),
+  :global(input:focus-visible) {
+    outline: 2px solid #254416;
+    outline-offset: 4px;
+  }
+
+  .hero {
+    max-width: 864px;
+    margin: 0 auto 48px;
+    padding: 56px;
+    background: #20251e;
+    color: #fcf5ed;
+    border-radius: 4px;
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 32px 16px;
+  }
+
+  h1 {
+    margin: 0;
+  }
+
+  h1 img {
+    display: block;
+    border-radius: 50%;
+  }
+
+  .hero-content {
+    max-width: 640px;
+    margin: auto;
+    color: #deded3;
+  }
+
+  .hero-content p {
+    margin: 0 0 20px;
+  }
+
+  .hero-content .intro-text {
+    color: #fcf5ed;
+    font-family: Georgia, serif;
+    font-size: 28px;
+    line-height: 1.4;
+  }
+
+  .hero-content .last-paragraph {
+    margin-bottom: 0;
+  }
+
+  .socials {
+    display: flex;
+    gap: 24px;
+    font-size: 14px;
+  }
+
+  .socials a {
+    color: #20251e;
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: 896px) {
+    .hero {
+      margin-left: 16px;
+      margin-right: 16px;
+      padding: 24px;
+    }
+
+    .hero-content .intro-text {
+      font-size: 23px;
+    }
+
+    h1 img {
+      width: 150px;
+      height: 150px;
+    }
+  }
+</style>
 
 <script>
   import "../scripts/classes.ts";

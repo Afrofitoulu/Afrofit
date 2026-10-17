@@ -3,14 +3,6 @@ import { formatClassTime } from "../lib/format";
 
 const $ = (id: string) => document.getElementById(id)!;
 
-function renderHero(next: any) {
-  $("next-class-name").textContent = next.name;
-  $("next-class-date").textContent = formatClassTime(next.starts);
-  $("next-class-notes").textContent = next.notes ?? "";
-  ($("signup-open-btn") as HTMLAnchorElement).href = `/signup?class=${next.id}`;
-  $("class-details").hidden = false;
-}
-
 function renderList(classes: any[]) {
   const list = $("class-list-items");
   list.replaceChildren();
@@ -18,18 +10,34 @@ function renderList(classes: any[]) {
   for (const c of classes) {
     const li = document.createElement("li");
 
-    const name = document.createElement("strong");
+    const details = document.createElement("span");
+
+    const name = document.createElement("span");
+    name.className = "class-title";
     name.textContent = c.name;
 
-    const when = document.createElement("span");
-    when.textContent = " · " + formatClassTime(c.starts);
+    const when = document.createElement("time");
+    when.dateTime = c.starts;
+    when.textContent = formatClassTime(c.starts);
+    details.append(name, when);
+
+    if (c.notes?.trim()) {
+      const notes = document.createElement("span");
+      notes.className = "class-notes";
+      notes.textContent = c.notes;
+      details.append(notes);
+    }
 
     const link = document.createElement("a");
     link.className = "class-signup-btn";
-    link.href = `/signup?class=${c.id}`;
-    link.textContent = "Sign up";
+    link.href = `/signup?class=${encodeURIComponent(c.id)}`;
+    link.setAttribute("aria-label", `Sign up for ${c.name}`);
+    const chevron = document.createElement("span");
+    chevron.className = "class-chevron";
+    chevron.setAttribute("aria-hidden", "true");
+    link.append(details, chevron);
 
-    li.append(name, when, " ", link);
+    li.append(link);
     list.append(li);
   }
 
@@ -55,7 +63,6 @@ async function loadClasses() {
     return;
   }
 
-  renderHero(data[0]);
   renderList(data);
 }
 
