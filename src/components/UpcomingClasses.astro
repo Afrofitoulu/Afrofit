@@ -1,38 +1,34 @@
-<section id="hero">
-  <h1>Afrofit Oulu</h1>
-
+<section id="classes" aria-label="Upcoming classes">
   <p id="no-class-message" hidden>No classes scheduled yet. Check back soon!</p>
   <p id="hero-error" hidden>Couldn't load classes. Please try again later.</p>
-
-  <div id="class-details" hidden>
-    <h2 id="next-class-name"></h2>
-    <p id="next-class-date"></p>
-    <p id="next-class-notes"></p>
-    <button id="signup-open-btn" type="button">Sign up</button>
-  </div>
-</section>
 
 <section id="upcoming-classes" hidden>
   <h2>All upcoming classes</h2>
   <ul id="class-list-items"></ul>
 </section>
+</section>
 
 <style>
-  :global(body) {
-    background: #f1f0ec;
-    color: #18272b;
+  #classes {
+    padding: 4rem 1rem;
+    scroll-margin-top: 1rem;
+  }
+
+  #classes > p {
+    max-width: 54rem;
+    margin: auto;
   }
 
   #upcoming-classes {
     max-width: 54rem;
-    margin: 3rem auto;
+    margin: 0 auto;
   }
 
   #upcoming-classes h2 {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin: 0 0 1.25rem;
+    margin: 0 0 1.5rem;
     font-weight: normal;
     text-align: center;
   }
