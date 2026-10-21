@@ -3,6 +3,8 @@ import { formatClassTime } from "../lib/format";
 
 const $ = (id: string) => document.getElementById(id)!;
 
+//Renders list of upcoming classes
+
 function renderList(classes: any[]) {
   const list = $("class-list-items");
   list.replaceChildren();
@@ -43,6 +45,8 @@ function renderList(classes: any[]) {
 
   $("upcoming-classes").hidden = classes.length === 0;
 }
+
+//Supabase query of classes
 
 async function loadClasses() {
   const { data, error } = await supabase

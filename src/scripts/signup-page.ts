@@ -44,6 +44,8 @@ function getSelectedClass() {
   }
 }
 
+// Shows the correct class notes
+
 function showNotes() {
   const chosen = getSelectedClass();
   $("form-class-info").hidden = true;
@@ -54,6 +56,8 @@ function showNotes() {
     $("form-class-info").hidden = false;
   }
 }
+
+// Gets classes future classes from supabase
 
 async function loadClasses() {
   const { data, error } = await supabase
@@ -78,8 +82,8 @@ async function loadClasses() {
 
   classes = data;
 
-  // /signup?class=12 opens with that class selected.
-  // If the id is missing or the class has passed, the next class stays selected.
+  // Opens with selected class
+
   const wanted = new URLSearchParams(location.search).get("class");
   select.replaceChildren();
   for (const classItem of classes) {
@@ -110,7 +114,8 @@ $("signup-page-form").addEventListener("submit", async (e) => {
     clearFieldError(field);
   }
 
-  // Copy everything before the await, so changes while saving can't affect it
+  // Gets the signup inputs
+
   const chosen = getSelectedClass();
   const name = input("form-name").value.trim();
   const phone = input("form-phone").value.trim();
@@ -143,6 +148,8 @@ $("signup-page-form").addEventListener("submit", async (e) => {
   btn.disabled = true;
   btn.textContent = "Signing you up…";
 
+  // Sends the signup to supabase
+
   try {
     const { error } = await supabase
       .from("signups")
@@ -163,6 +170,8 @@ $("signup-page-form").addEventListener("submit", async (e) => {
       showError("Something went wrong. Please try again.");
       return;
     }
+
+    // When data is sent opens confrmation panel
 
     $("signup-page-form").hidden = true;
     $("form-heading").hidden = true;

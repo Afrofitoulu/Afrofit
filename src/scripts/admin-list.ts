@@ -6,6 +6,7 @@ const $ = (id: string) => document.getElementById(id)!;
 let started = false;
 
 // Deletes classes that started more than 24 hours ago
+
 async function cleanup() {
   const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const { error } = await supabase.from("classes").delete().lt("starts", cutoff);
@@ -13,6 +14,8 @@ async function cleanup() {
     console.error("Cleanup failed", error);
   }
 }
+
+// Compiles all the Class name start time and signups
 
 function renderClass(classItem: any) {
   const box = document.createElement("article");
@@ -41,6 +44,8 @@ function renderClass(classItem: any) {
   box.append(title, count, list, deleteButton);
   return box;
 }
+
+// Gets classes and their signups, upcoming ones and past ones
 
 async function loadList() {
   $("admin-list-error").hidden = true;
@@ -77,6 +82,8 @@ async function loadList() {
   $("admin-past-section").hidden = pastList.children.length === 0;
 }
 
+// Clears old classes from supabase
+
 async function start() {
   if (started) {
     return;
@@ -86,11 +93,15 @@ async function start() {
   await loadList();
 }
 
+// When signing out empties screen
+
 function stop() {
   started = false;
   $("admin-upcoming").replaceChildren();
   $("admin-past").replaceChildren();
 }
+
+// Checks if admin is signed in
 
 async function checkSession() {
   const { data } = await supabase.auth.getSession();
@@ -102,7 +113,6 @@ async function checkSession() {
 checkSession();
 
 supabase.auth.onAuthStateChange((_event, session) => {
-  // Run database requests after the auth callback has finished.
   setTimeout(() => {
     if (session) {
       start();
@@ -111,6 +121,8 @@ supabase.auth.onAuthStateChange((_event, session) => {
     }
   }, 0);
 });
+
+// Deletes class and its signups
 
 document.addEventListener("click", async (e) => {
   const btn = (e.target as HTMLElement).closest(".delete-class-btn") as HTMLElement | null;

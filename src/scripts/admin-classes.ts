@@ -10,6 +10,8 @@ function show(id: "add-class-error" | "add-class-success", message: string) {
   $(id).hidden = false;
 }
 
+// Gets the inputs for a new class
+
 $("add-class-form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -27,7 +29,7 @@ $("add-class-form").addEventListener("submit", async (e) => {
     return;
   }
 
-  const startsDate = new Date(startsValue); // read in this browser's time zone
+  const startsDate = new Date(startsValue);
   if (startsDate.getTime() <= Date.now()) {
     show("add-class-error", "That time is in the past.");
     return;
@@ -35,6 +37,8 @@ $("add-class-form").addEventListener("submit", async (e) => {
 
   const btn = $("add-class-btn") as HTMLButtonElement;
   btn.disabled = true;
+
+  // Sends the class details to supabase
 
   const { error } = await supabase.from("classes").insert({
     name,
